@@ -11,18 +11,18 @@ import (
 
 func main() {
 	godotenv.Load()
-	db := services.Connect()
-	services.Migrate(db)
+	services.Connect()
+	services.Migrate()
 	gin.SetMode(os.Getenv("MODE"))
 
 	router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
-		controllers.Index(c, db)
+	router.GET("/books", func(c *gin.Context) {
+		controllers.AllBooks(c)
 	})
 
 	router.GET("/book/:id", func(c *gin.Context) {
-		controllers.Index(c, db)
+		controllers.FindBook(c)
 	})
 
 	router.Run()
