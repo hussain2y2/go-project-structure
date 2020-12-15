@@ -1,5 +1,5 @@
 package routes
 
-func routes() {
+func Routes() {
 
 }

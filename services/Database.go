@@ -6,21 +6,23 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func Connect() {
 	godotenv.Load()
-	driver := os.Getenv("DB_DRIVER")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
 	username := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
-	database := os.Getenv("DB_NAME")
+	database := os.Getenv("DB_DATABASE")
 
-	connection, err := gorm.Open(driver, fmt.Sprint(username+":"+password+"@/"+database+"?charset=utf8&parseTime=True&loc=Local"))
+	dsn := fmt.Sprint(username + ":" + password + "@tcp(" + host + ":" + port + ")/" + database + "?charset=utf8&parseTime=True&loc=Local")
+	connection, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic("Failed to connect to database!")
